@@ -1,3 +1,20 @@
+const BALL_RADIUS = 3;
+const DISTANCE_BETWEEN_BALLS = 9;
+const PEN_HEIGHT = 18;
+const INITIAL_Z_OFFSET = 18;
+
+const INITIAL_CAMERA_POSITION = {
+  x: 0,
+  y: PEN_HEIGHT,
+  z: INITIAL_Z_OFFSET,
+};
+
+const BALLS = initializeBalls();
+
+drawOutput();
+
+
+
 fileInput.onchange = function (event) {
   const file = event.target.files[0];
   inputVideo.src = URL.createObjectURL(file);
@@ -20,8 +37,6 @@ function loop() {
   const imgData = ctx.getImageData(0, 0, width, height);
   const rgbCounts = segmentImage(imgData);
   const apparentRadii = rgbCounts.map((area) => Math.sqrt(area / Math.PI));
-
-  console.log(apparentRadii);
 
   requestAnimationFrame(loop);
 }
@@ -57,4 +72,56 @@ function segmentImage(imgData, threshold = 50) {
 
   ctx.putImageData(outputData, 0, 0);
   return rgbCounts;
+}
+
+
+function initializeBalls() {
+  const triangleLength = DISTANCE_BETWEEN_BALLS;
+  const left = -triangleLength / 2;
+  const right = triangleLength / 2;
+
+  const triangleHeight = triangleLength * Math.sqrt(3) / 2;
+  const bottom = PEN_HEIGHT - triangleHeight / 3;
+  const top = PEN_HEIGHT + triangleHeight * 2 / 3;
+
+  const radius = BALL_RADIUS;
+
+  return [
+    { x: 0,     y: top,     z: 0, radius, color: "#ff0000" },
+    { x: right, y: bottom,  z: 0, radius, color: "#00ff00" },
+    { x: left,  y: bottom,  z: 0, radius, color: "#0000ff" },
+  ];
+}
+
+
+function drawOutput() {
+  const { width, height } = outputCanvas;
+  const ctx = outputCanvas.getContext("2d");
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = "black";
+  ctx.textBaseline = "top";
+  ctx.font = "20px Arial";
+  ctx.fillText("Top View", 5, 5);
+
+  ctx.save();
+  ctx.translate(width / 2, height / 2);
+  ctx.scale(5, 5);
+  for (let i = BALLS.length - 1; i >= 1; i--) {
+    const {x, z, radius, color} = BALLS[i];
+    ctx.beginPath();
+    ctx.arc(x, z, radius, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  ctx.beginPath();
+  const { x, z } = INITIAL_CAMERA_POSITION;
+  ctx.arc(x, z, 2, 0, Math.PI * 2);
+  ctx.fillStyle = "black";
+  ctx.fill();
+
+  ctx.restore();
 }
