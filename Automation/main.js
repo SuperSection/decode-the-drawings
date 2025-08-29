@@ -123,7 +123,7 @@ function drawOutput(distanceToBalls) {
   ctx.save();
   ctx.translate(width / 2, height / 2);
   ctx.scale(5, 5);
-  for (let i = BALLS.length - 1; i >= 1; i--) {
+  for (let i = BALLS.length - 1; i >= 0; i--) {
     const {x, z, radius, color} = BALLS[i];
     ctx.beginPath();
     ctx.arc(x, z, radius, 0, Math.PI * 2);
