@@ -13,6 +13,7 @@ const BALLS = initializeBalls();
 
 const INITIAL_DISTANCES_TO_BALLS = BALLS.map((ball) => distance(ball, INITIAL_CAMERA_POSITION));
 
+const cameraPositions = [];
 let initialApparentRadii = null;
 
 
@@ -30,6 +31,7 @@ inputVideo.onloadeddata = function () {
   segmentationCanvas.height = inputVideo.videoHeight;
   loop();
 };
+
 
 function loop() {
   const { width, height } = inputCanvas;
@@ -50,10 +52,23 @@ function loop() {
     distancesToBalls[i] = INITIAL_DISTANCES_TO_BALLS[i] * ratio;
   }
 
-  drawOutput(distancesToBalls);
+  const d = DISTANCE_BETWEEN_BALLS;
+  const a = distancesToBalls[0];
+  const b = distancesToBalls[1];
+  const c = distancesToBalls[2];
+
+  const x = (c ** 2 - d ** 2 - b ** 2) / (2 * d);
+  const z = Math.sqrt(b ** 2 - x ** 2);
+
+  const xOffset = d / 2;
+  const cameraPosition = { x: x + xOffset, z };
+  cameraPositions.push(cameraPosition);
+
+  drawOutput(distancesToBalls, cameraPositions);
 
   requestAnimationFrame(loop);
 }
+
 
 function segmentImage(imgData, threshold = 50) {
   const { width, height, data } = imgData;
@@ -108,7 +123,7 @@ function initializeBalls() {
 }
 
 
-function drawOutput(distanceToBalls) {
+function drawOutput(distanceToBalls, path) {
   const { width, height } = outputCanvas;
   const ctx = outputCanvas.getContext("2d");
 
@@ -123,7 +138,9 @@ function drawOutput(distanceToBalls) {
   ctx.save();
   ctx.translate(width / 2, height / 2);
   ctx.scale(5, 5);
-  for (let i = BALLS.length - 1; i >= 0; i--) {
+
+  // Draw balls + distance circles
+  for (let i = BALLS.length - 1; i >= 1; i--) {
     const {x, z, radius, color} = BALLS[i];
     ctx.beginPath();
     ctx.arc(x, z, radius, 0, Math.PI * 2);
@@ -137,11 +154,12 @@ function drawOutput(distanceToBalls) {
     ctx.stroke();
   }
 
-  ctx.beginPath();
-  const { x, z } = INITIAL_CAMERA_POSITION;
-  ctx.arc(x, z, 0.5, 0, Math.PI * 2);
-  ctx.fillStyle = "black";
-  ctx.fill();
+  path.forEach(({ x, z }) => {
+    ctx.beginPath();
+    ctx.arc(x, z, 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = "black";
+    ctx.fill();
+  });
 
   ctx.restore();
 }
