@@ -1,5 +1,7 @@
 import { updateSimulation, getSimulationImageData } from "./simulator.js";
 
+let inputType = null;
+
 const cameraPositions = [];
 
 fileInput.onchange = function (event) {
@@ -9,28 +11,36 @@ fileInput.onchange = function (event) {
 };
 
 inputVideo.onloadeddata = function () {
-  inputCanvas.width = inputVideo.videoWidth;
-  inputCanvas.height = inputVideo.videoHeight;
+  inputType = "video";
+  videoCanvas.width = inputVideo.videoWidth;
+  videoCanvas.height = inputVideo.videoHeight;
   segmentationCanvas.width = inputVideo.videoWidth;
   segmentationCanvas.height = inputVideo.videoHeight;
   loop();
 };
 
-segmentationCanvas.width = simulationCanvas.width;
-segmentationCanvas.height = simulationCanvas.height;
-loop();
+simulationButton.onclick = function () {
+  inputType = "simulation";
+  segmentationCanvas.width = simulationCanvas.width;
+  segmentationCanvas.height = simulationCanvas.height;
+  loop();
+}
+
 
 function loop() {
-  updateSimulation();
+  let imgData = null;
 
-  const imgData = getSimulationImageData();
-  /*
-  const { width, height } = inputCanvas;
-  const ctx = inputCanvas.getContext("2d", { willReadFrequently: true });
-  ctx.drawImage(inputVideo, 0, 0);
+  if (inputType == "simulation") {
+    updateSimulation();
+    imgData = getSimulationImageData();
 
-  const imgData = ctx.getImageData(0, 0, width, height);
-  */
+  } else if (inputType == "video") {
+    const { width, height } = videoCanvas;
+    const ctx = videoCanvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(inputVideo, 0, 0);
+
+    imgData = ctx.getImageData(0, 0, width, height);
+  }
 
   const rgbCounts = segmentImage(imgData);
 
