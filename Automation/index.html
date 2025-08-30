@@ -18,33 +18,29 @@
   </head>
 
   <body>
-    <div>
-      <p>Input:</p>
-      <video id="inputVideo" style="display: none"></video>
-      <canvas id="videoCanvas"></canvas>
-
-      <canvas id="simulationCanvas" width="1280", height="720"></canvas>
-      <button id="simulationButton">Start Simulation</button>
-
-      <input id="fileInput" type="file" accept="video/*" />
-
-      <p>Segmentation:</p>
-      <canvas id="segmentationCanvas"></canvas>
+    <div id="startPanel">
+      <input id="fileInput" type="file" accept="video/*" style="display: none" />
+      <button id="videoButton">Video</button>
+      <button id="simulationButton">Simulation</button>
     </div>
 
-    <div>
-      <p>Output:</p>
-      <canvas id="outputCanvas" width="800" height="1400"></canvas>
+    <div id="mainInterface" style="display: none">
+      <div>
+        <p>Input:</p>
+        <video id="inputVideo" style="display: none"></video>
+        <canvas id="videoCanvas"></canvas>
+        <canvas id="simulationCanvas" width="1280", height="720"></canvas>
+        <p>Segmentation:</p>
+        <canvas id="segmentationCanvas"></canvas>
+      </div>
+      <div>
+        <p>Output:</p>
+        <canvas id="outputCanvas" width="800" height="1400"></canvas>
+      </div>
     </div>
 
-    <script src="js/math.js"></script>
-    <script src="js/parameters.js"></script>
-    <script src="js/imageProcessing.js"></script>
-    <script src="js/estimator.js"></script>
-    <script src="js/output.js"></script>
-
-    <script type="module" src="js/simulator.js"></script>
-
+    <!-- <script type="module" src="js/input.js"></script>
+    <script type="module" src="js/simulator.js"></script> -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-function segmentImage(imgData, threshold = 50) {
+export function segmentImage(imgData, threshold = 50) {
   const { width, height, data } = imgData;
   const ctx = segmentationCanvas.getContext("2d");
 

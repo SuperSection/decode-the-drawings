@@ -1,6 +1,9 @@
 import * as THREE from "three";
+import { BALLS, CAMERA_FOV, INITIAL_CAMERA_POSITION, PEN_HEIGHT } from "./parameters.js";
 
-const rendered = new THREE.WebGLRenderer({ canvas: simulationCanvas, antialias: true });
+const simulationCanvas = document.getElementById("simulationCanvas");
+
+const renderer = new THREE.WebGLRenderer({ canvas: simulationCanvas, antialias: true });
 
 const scene = new THREE.Scene();
 
@@ -20,8 +23,21 @@ const path = generateCirclePath(INITIAL_CAMERA_POSITION);
 
 
 export function updateSimulation() {
-  camera.position.copy(path.shift());
-  rendered.render(scene, camera);
+  if (!path || path.length === 0) {
+    console.warn("No path points available for simulation");
+    return;
+  }
+
+  const trueCameraPosition = path.shift();
+  if (!trueCameraPosition) {
+    console.warn("trueCameraPosition is undefined");
+    return;
+  }
+
+  camera.position.copy(trueCameraPosition);
+  camera.lookAt(new THREE.Vector3(0, PEN_HEIGHT, 0));
+  renderer.render(scene, camera);
+  return trueCameraPosition;
 }
 
 
@@ -29,13 +45,13 @@ export function getSimulationImageData() {
   const { width, height } = simulationCanvas;
   const pixels = new Uint8ClampedArray(width * height * 4);
 
-  const gl = rendered.getContext();
+  const gl = renderer.getContext();
   gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
   // fix vertical flip
   for (let y = 0; y < height / 2; y++) {
     for (let x = 0; x < width; x++) {
-      for (let i = 0; i < BALLS.length; i++) {
+      for (let i = 0; i < 4; i++) {
         const topIndex = (y * width + x) * 4 + i;
         const bottomY = height - y - 1;
         const bottomIndex = (bottomY * width + x) * 4 + i;

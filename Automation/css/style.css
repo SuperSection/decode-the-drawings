@@ -3,8 +3,20 @@ body {
   font-family: sans-serif;
 }
 
+#startPanel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#mainInterface {
+  justify-content: space-evenly;
+  width: 100%;
+}
+
 canvas {
-    width: 400px;
-    background-color: silver;
-    border: 1px solid black;
+  width: 400px;
+  background-color: silver;
+  border: 1px solid black;
 }

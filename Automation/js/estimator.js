@@ -1,6 +1,8 @@
+import { DISTANCE_BETWEEN_BALLS, INITIAL_DISTANCES_TO_BALLS } from "./parameters.js";
+
 let initialApparentRadii = null;
 
-function estimateDistancesToBalls(rgbCounts) {
+export function estimateDistancesToBalls(rgbCounts) {
   const apparentRadii = rgbCounts.map((area) => Math.sqrt(area / Math.PI));
 
   if (!initialApparentRadii) {
@@ -17,7 +19,7 @@ function estimateDistancesToBalls(rgbCounts) {
   return distancesToBalls;
 }
 
-function estimateCameraPosition(distancesToBalls) {
+export function estimateCameraPosition(distancesToBalls) {
   const d = DISTANCE_BETWEEN_BALLS;
 
   const a = distancesToBalls[0];

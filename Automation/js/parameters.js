@@ -1,19 +1,21 @@
-const BALL_RADIUS = 3;
-const DISTANCE_BETWEEN_BALLS = 9;
-const PEN_HEIGHT = 18;
-const INITIAL_Z_OFFSET = 18;
+import { distance } from "./math.js";
 
-const CAMERA_FOV = 60; // just a guess
+export const BALL_RADIUS = 3;
+export const DISTANCE_BETWEEN_BALLS = 9;
+export const PEN_HEIGHT = 18;
+export const INITIAL_Z_OFFSET = 18;
 
-const INITIAL_CAMERA_POSITION = {
+export const CAMERA_FOV = 60; // just a guess
+
+export const INITIAL_CAMERA_POSITION = {
   x: 0,
   y: PEN_HEIGHT,
   z: INITIAL_Z_OFFSET,
 };
 
-const BALLS = initializeBalls();
+export const BALLS = initializeBalls();
 
-const INITIAL_DISTANCES_TO_BALLS = BALLS.map((ball) => distance(ball, INITIAL_CAMERA_POSITION));
+export const INITIAL_DISTANCES_TO_BALLS = BALLS.map((ball) => distance(ball, INITIAL_CAMERA_POSITION));
 
 
 function initializeBalls() {
