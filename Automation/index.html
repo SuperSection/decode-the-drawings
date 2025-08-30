@@ -6,6 +6,15 @@
     <title>Decoding The Drawings</title>
     <link href="css/style.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png" />
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+      }
+    }
+    </script>
   </head>
 
   <body>
@@ -13,6 +22,7 @@
       <p>Input:</p>
       <video id="inputVideo" style="display: none"></video>
       <canvas id="inputCanvas"></canvas>
+      <canvas id="simulationCanvas" width="1280", height="720"></canvas>
       <input id="fileInput" type="file" accept="video/*" />
 
       <p>Segmentation:</p>
@@ -29,6 +39,9 @@
     <script src="js/imageProcessing.js"></script>
     <script src="js/estimator.js"></script>
     <script src="js/output.js"></script>
-    <script src="js/main.js"></script>
+
+    <script type="module" src="js/simulator.js"></script>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>

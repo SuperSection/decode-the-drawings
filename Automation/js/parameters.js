@@ -3,6 +3,8 @@ const DISTANCE_BETWEEN_BALLS = 9;
 const PEN_HEIGHT = 18;
 const INITIAL_Z_OFFSET = 18;
 
+const CAMERA_FOV = 60; // just a guess
+
 const INITIAL_CAMERA_POSITION = {
   x: 0,
   y: PEN_HEIGHT,
